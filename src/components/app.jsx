@@ -55,11 +55,13 @@ class App extends Component {
       <div className="app">
         <h1 className="app-title">ホテル検索</h1>
         <SearchForm onSubmit={place => this.handlePlaceSubmit(place)} />
-        <GeocodeResult
-          address={this.state.address}
-          location={this.state.location}
-        />
-        <Map location={this.state.location} />
+        <div className="result-area">
+          <Map location={this.state.location} />
+          <GeocodeResult
+            address={this.state.address}
+            location={this.state.location}
+          />
+        </div>
       </div>
     );
   }
