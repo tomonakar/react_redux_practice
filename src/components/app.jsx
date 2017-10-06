@@ -13,19 +13,41 @@ class App extends Component {
     };
   }
 
+  setErrorMessage(message) {
+    this.setState({
+      address: message,
+      lat: 0,
+      lng: 0,
+    });
+  }
+
   handlePlaceSubmit(place) {
     axios
       .get(GEOCODE_ENDPOINT, { params: { address: place } })
       .then((results) => {
         console.log(results);
+        const data = results.data;
         const result = results.data.results[0];
-        const location = result.geometry.location;
-        this.setState({
-          address: result.formatted_address,
-          lat: location.lat,
-          lng: location.lng,
-         });
-
+        switch (data.status) {
+          case 'OK': {
+            this.setState({
+              address: result.formatted_address,
+              lat: location.lat,
+              lng: location.lng,
+            });
+            break;
+          }
+          case 'ZERO_RESULTS': {
+            this.setErrorMessage('検索結果が見つかりませんでした。');
+            break;
+          }
+          default: {
+            this.setErrorMessage('エラーが発生しました。');
+          }
+        }
+      })
+      .catch(() => {
+        this.setErrorMessage('通信エラーが発生しました。');
       });
   }
 
