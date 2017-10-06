@@ -32,8 +32,8 @@ class App extends Component {
           case 'OK': {
             this.setState({
               address: result.formatted_address,
-              lat: location.lat,
-              lng: location.lng,
+              lat: result.geometry.location.lat,
+              lng: result.geometry.location.lng,
             });
             break;
           }
