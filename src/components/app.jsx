@@ -52,8 +52,8 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <h1>緯度経度検索</h1>
+      <div className="app">
+        <h1 className="app-title">ホテル検索</h1>
         <SearchForm onSubmit={place => this.handlePlaceSubmit(place)} />
         <GeocodeResult
           address={this.state.address}
