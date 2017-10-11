@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 class SearchForm extends Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       place: '東京タワー',

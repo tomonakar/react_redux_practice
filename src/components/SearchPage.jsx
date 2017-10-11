@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
-
+import queryString from 'query-string';
 
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
@@ -14,6 +15,7 @@ const sortedHotels = (hotels, sortKey) => _.sortBy(hotels, h => h[sortKey]);
 
 class SearchPage extends Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       location: {
@@ -22,6 +24,14 @@ class SearchPage extends Component {
       },
       sortKey: 'price',
     };
+  }
+
+  componentDidMount() {
+    const params = queryString.parse(this.props.location.search);
+    const place = params.place;
+    if (place && place.length > 0) {
+      this.startSearch(place);
+    }
   }
 
   setErrorMessage(message) {
@@ -35,6 +45,11 @@ class SearchPage extends Component {
   }
 
   handlePlaceSubmit(place) {
+    this.props.history.push(`/?place=${place}`);
+    this.startSearch(place);
+  }
+
+  startSearch(place) {
     geocode(place)
       .then(({ status, address, location }) => {
         switch (status) {
@@ -91,5 +106,9 @@ class SearchPage extends Component {
     );
   }
 }
+SearchPage.propTypes = {
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+  location: PropTypes.shape({ search: PropTypes.string }).isRequired,
+};
 
 export default SearchPage;
